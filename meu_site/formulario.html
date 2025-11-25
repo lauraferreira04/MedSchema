@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário - MedSchema</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="image/favicon.png">
+</head>
+<body>
+
+    <!-- Cabeçalho -->
+    <header class="header">
+        <img src="image/logo.png" alt="Logo do MedSchema">
+    </header>
+
+    <main class="form-main">
+
+        <!-- CONTAINER 1 -->
+        <section class="container1">
+
+            <div class="box">
+                <label>Nome do paciente</label>
+                <input type="text">
+            </div>
+
+            <div class="box">
+                <label>Data ida</label>
+                <input type="date">
+            </div>
+
+            <div class="box">
+                <label>Data volta</label>
+                <input type="date">
+            </div>
+
+            <div class="box checkbox-box">
+                <input type="checkbox" id="grade">
+                <label for="grade">Inserir grade de dias</label>
+            </div>
+
+        </section>
+
+        <!-- CONTAINER 2 -->
+        <section class="container2">
+
+            <!-- div 10 -->
+            <div class="c2-box">
+                <label>Medicamentos</label>
+                <select>
+                    <option>SELECIONE</option>
+                    <option>CLORIDRATO DE PROPRANOLOL 40MG</option>
+                    <option>SUCCINATO DE METOPROLOL 25MG</option>
+                    <option>ALENDRONATO DE SÓDIO 70MG</option>
+                    <option>BUDESONIDA 50MCG</option>
+                </select>
+
+                <label class="extra-label">Instrução extra</label>
+                <input type="text">
+            </div>
+
+            <!-- div 11 -->
+            <div class="c2-box image-box">
+                <img src="image/imagem_padrao.png" alt="Imagem do medicamento">
+            </div>
+
+            <!-- div 12 -->
+            <div class="c2-box">
+                <label>Horário</label>
+                <input type="time">
+
+                <label>Turno</label>
+                <select>
+                    <option>SELECIONE</option>
+                    <option>MANHÃ</option>
+                    <option>TARDE</option>
+                    <option>NOITE</option>
+                </select>
+            </div>
+
+            <!-- div 13 -->
+            <div class="c2-box">
+                <div class="c2-item">
+                    <input type="checkbox" id="img-medicamento">
+                    <label for="img-medicamento">Inserir imagem do medicamento</label>
+                </div>
+
+                <div class="c2-item">
+                    <input type="checkbox" id="turno-medicamento">
+                    <label>Inserir hora/turno de forma visual</label>
+                </div>
+
+                <button class="btn-add">ADICIONAR</button>
+            </div>
+
+        </section>
+
+        <!-- CONTAINER 3 -->
+        <section class="container3">
+
+            <!-- div 14 -->
+            <div class="lista-box">
+                <h3>   Lista de medicamentos</h3>
+                <ul>
+                    <li>   CLORIDRATO DE PROPRANOLOL 40MG</li>
+                    <li>   SUCCINATO DE METOPROLOL 25MG</li>
+                    <li>   ALENDRONATO DE SÓDIO 70MG</li>
+                    <li>   BUDESONIDA 50MCG</li>
+                </ul>
+            </div>
+
+            <!-- div 15 -->
+            <div class="gerar-box">
+                <button class="btn-gerar">GERAR PDF</button>
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

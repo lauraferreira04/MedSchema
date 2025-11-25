@@ -1,0 +1,269 @@
+/* Configuração geral */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #fcffe9;
+    font-family: Arial, Helvetica, sans-serif;
+
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* DIV 1 - Cabeçalho */
+.header {
+    background-color: transparent;
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+
+    left: 0;
+}
+
+/* Garantir que o conteúdo não fique atrás do header */
+main {
+    margin-top: 120px;
+    margin-bottom: 120px;
+}
+
+/* Layout das divs 2 e 3 */
+.main-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    padding: 20px;
+}
+
+/* DIV 2 */
+.div2 {
+    width: 60%;
+    padding: 30px;
+
+    margin-top: 100px; 
+}
+
+.div2 h1 {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.div2 p {
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+/* DIV 3 */
+.div3 {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 100px;
+}
+
+.botao-gerar {
+    background-color: #00bf63;
+    padding: 18px 25px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    text-align: center;
+
+    transition: 0.3s;
+}
+
+.botao-gerar:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+/* DIV 4 - Rodapé */
+.footer {
+    background-color: #ececec;
+    text-align: center;
+    padding: 25px 0;
+
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+.footer p {
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+/* Ajuste geral da página do formulário */
+.form-main {
+    margin-top: 40px; 
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-bottom: 50px;
+}
+
+/* CONTAINER 1 */
+/* Campos lado a lado */
+.container1 {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.container1 .box {
+    display: flex;
+    flex-direction: column; /* <<< garante que label fique em cima */
+}
+
+/* Garantir que a checkbox e seu label fiquem lado a lado */
+.container1 .box.checkbox-box {
+    display: flex;              /* já tem, mas reafirmamos */
+    flex-direction: row !important; /* força linha */
+    align-items: center;        /* alinha verticalmente */
+    gap: 10px;                  /* espaço entre checkbox e texto */
+}
+
+/* remove margens indesejadas no label da checkbox */
+.container1 .box.checkbox-box label {
+    margin: 0;
+    line-height: 1; /* garante alinhamento vertical correto */
+}
+
+/* evita que o input checkbox herde larguras dos outros inputs */
+.container1 .box.checkbox-box input[type="checkbox"] {
+    width: auto;
+    height: auto;
+    margin: 0;
+}
+
+.container1 .box:first-child input[type="text"] {
+    width: 350px;   /* campo nome maior */
+}
+
+.container1 input[type="text"],
+.container1 input[type="date"] {
+    padding: 10px;
+    width: 200px;
+}
+
+.checkbox-box {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* CONTAINER 2 */
+.container2 {
+    background-color: #e5eaf3;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 25px;
+
+    width: 65%;            /* largura menor para virar um bloco */
+    margin: 0 auto;        /* centraliza horizontalmente */
+    border-radius: 12px;   /* cantos arredondados */
+}
+
+.c2-box {
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+    gap: 12px;
+}
+
+/* Centralizar verticalmente os itens da div 13 */
+.container2 .c2-box:nth-child(4) {
+    justify-content: center;
+}
+
+.c2-box select,
+.c2-box input[type="text"],
+.c2-box input[type="time"] {
+    padding: 8px;
+}
+
+.image-box img {
+    width: 150px;      /* <<< tamanho reduzido */
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;    /* centraliza dentro da div */
+}
+
+/* Div 13 add button */
+.btn-add {
+    background-color: #00bf63;
+    padding: 10px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px;
+    width: 65%;            /* largura menor para virar um bloco */
+    margin: 0 auto;        /* centraliza horizontalmente */
+    border-radius: 12px;   /* cantos arredondados */
+
+}
+
+
+/* CONTAINER 3 */
+.container3 {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;             /* distância menor entre lista e botão */
+    padding: 20px;
+}
+
+/* LISTA */
+.lista-box {
+    padding: 20px;
+    background-color: #e5eaf3;
+    width: 810px;          /* <<< aumentada */
+    border-radius: 8px;
+}
+
+/* Recuo interno dos itens da lista */
+.lista-box ul {
+    padding-left: 60px;    /* <<< recuo do texto */
+}
+
+
+.lista-box h3 {
+    margin-bottom: 10px;
+}
+
+.gerar-box {
+    display: flex;
+    align-items: start;
+}
+
+.btn-gerar {
+    background-color: #00bf63;
+    padding: 15px 25px;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-add:hover,
+.btn-gerar:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
