@@ -1,0 +1,77 @@
+@startuml
+left to right direction
+skinparam classAttributeIconSize 0
+
+class Usuario {
+    +id: number
+    +nome: string
+    +email: string
+    +senha: string
+    +tipo: string
+    +perfil: Perfil
+    +esquemas: List<Esquema>
+    +registrar()
+    +login()
+    +editarPerfil()
+}
+
+class Perfil {
+    +id: number
+    +descricao: string
+}
+
+class Esquema {
+    +id: number
+    +paciente: Usuario
+    +dataIda: Date
+    +dataVolta: Date
+    +gradeDias: boolean
+    +listaMedicamentos: List<Medicamento>
+    +salvar()
+    +exportarPDF()
+    +editar()
+}
+
+class Medicamento {
+    +id: number
+    +nome: string
+    +descricao: string
+    +horario: string
+    +turno: string
+    +instrucaoExtra: string
+    +imagemBase64: string
+    +usarImagem: boolean
+    +usarTurnoVisual: boolean
+}
+
+class MedicamentoPersonalizado {
+    +aprovado: boolean
+    +solicitarAprovacao()
+}
+
+class Administrador {
+    +aprovarMedicamento(med: MedicamentoPersonalizado)
+    +rejeitarMedicamento(med: MedicamentoPersonalizado)
+    +gerenciarBaseMedicamentos()
+}
+
+class EsquemaService {
+    +gerarPDF(esquema: Esquema)
+    +listarEsquemas(usuario: Usuario)
+    +buscarEsquema(nomePaciente: string)
+}
+
+class MedicamentoService {
+    +buscarBaseSUS(nome: string): Medicamento
+    +adicionarPersonalizado(med: MedicamentoPersonalizado)
+    +aprovarMedicamento(med: MedicamentoPersonalizado)
+}
+
+Usuario "1" -- "*" Esquema
+Esquema "1" -- "*" Medicamento
+MedicamentoPersonalizado --|> Medicamento
+Administrador --|> Usuario
+
+EsquemaService --> Esquema
+MedicamentoService --> Medicamento
+@enduml

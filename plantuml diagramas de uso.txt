@@ -1,0 +1,124 @@
+diagrama de uso mvp
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor<<access>> LightYellow
+  BorderColor<<access>> #888888
+}
+
+actor "Usuário (anônimo)\n(acessa a página única)" as User
+
+rectangle "Gerador de Esquemas - MVP" {
+  usecase "Inserir nome do paciente" as UC_PatientName
+  usecase "Inserir nome do médico" as UC_DoctorName
+  usecase "Definir data de geração" as UC_Date
+  usecase "Opção: modo analfabeta\n(ícones + layout simplificado)" as UC_Illiterate <<access>>
+  usecase "Opção: incluir imagens no esquema" as UC_IncludeImages <<access>>
+  usecase "Opção: incluir grade (checklist)\n(definir data ida e volta → gerar quadrados)" as UC_Checklist
+  usecase "Selecionar remédio(s) da base SUS\n(para cada: horário/turno, dias, instruções)" as UC_SelectMeds
+  usecase "Adicionar medicamento temporário\n(modal - salva só para esta geração)" as UC_TempMed
+  usecase "Visualizar prévia do esquema" as UC_Preview
+  usecase "Gerar / Exportar PDF" as UC_Export
+  usecase "Editar / Resetar formulário" as UC_Reset
+}
+
+' Relações
+User --> UC_PatientName
+User --> UC_DoctorName
+User --> UC_Date
+User --> UC_Illiterate
+User --> UC_IncludeImages
+User --> UC_Checklist
+User --> UC_SelectMeds
+User --> UC_TempMed
+User --> UC_Preview
+User --> UC_Export
+User --> UC_Reset
+
+' Modal incluido quando necessário
+UC_TempMed .[#gray,dashed].> UC_SelectMeds : <<includes>> 
+UC_Checklist .[#gray,dashed].> UC_Date : <<includes>> 
+
+' Notas rápidas (visuais)
+note right of UC_Illiterate
+  Modifica a UI:
+  - maiores ícones
+  - menos texto
+  - leitura por símbolos
+end note
+
+note right of UC_Checklist
+  Ao ativar:
+  - usuário insere data ida e volta
+  - sistema calcula dias e gera matriz de checkboxes
+end note
+
+note right of UC_TempMed
+  Modal: nome + upload de foto
+  - não persiste no servidor (client-only)
+  - incluído no esquema atual
+end note
+
+@enduml
+
+diagrama de uso versões futuras
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Usuário Anônimo" as Anonymous
+actor "Usuário Cadastrado\n(paciente/familiar/profissional)" as User
+actor "Administrador" as Admin
+
+rectangle "Aplicação Geradora de Esquemas" {
+  usecase "Gerar esquema (MVP)\n(usar base SUS, exportar PDF)" as UC_Generate
+  usecase "Visualizar prévia" as UC_Preview
+  usecase "Pesquisar medicamento (base SUS)" as UC_SearchMed
+  usecase "Inserir medicamento temporário\n(janela flutuante)" as UC_InsertMedModal
+  usecase "Exportar/Imprimir PDF" as UC_Export
+
+  usecase "Registrar / Login" as UC_Auth
+  usecase "Ver/Editar Perfil" as UC_Profile
+  usecase "Salvar esquema pessoal" as UC_SaveScheme
+  usecase "Listar meus esquemas" as UC_ListSchemes
+  usecase "Editar esquema salvo" as UC_EditScheme
+  usecase "Buscar esquemas por nome do paciente" as UC_SearchScheme
+
+  usecase "Adicionar medicamento personalizado\n(Salvar só para mim / Enviar para aprovação)" as UC_AddCustomMed
+  usecase "Solicitar aprovação de medicamento" as UC_SubmitMed
+  usecase "Aprovar/Rejeitar medicamento" as UC_AdminApprove
+  usecase "Gerenciar base de medicamentos" as UC_AdminManageMed
+}
+
+' relacionamentos
+Anonymous --> UC_SearchMed
+Anonymous --> UC_Generate
+Anonymous --> UC_Preview
+Anonymous --> UC_Export
+Anonymous --> UC_InsertMedModal
+
+User --> UC_Auth
+User --> UC_Profile
+User --> UC_Generate
+User --> UC_Preview
+User --> UC_SearchMed
+User --> UC_InsertMedModal
+User --> UC_SaveScheme
+User --> UC_ListSchemes
+User --> UC_EditScheme
+User --> UC_SearchScheme
+User --> UC_AddCustomMed
+User --> UC_SubmitMed
+User --> UC_Export
+
+Admin --> UC_AdminApprove
+Admin --> UC_AdminManageMed
+Admin --> UC_SearchMed
+
+' extensões / notas
+UC_AddCustomMed .[#gray,dashed].> UC_InsertMedModal : <<includes>>
+UC_SubmitMed .[#gray,dashed].> UC_AddCustomMed : <<extends>>
+UC_AdminApprove .[#gray,dashed].> UC_AdminManageMed : <<includes>>
+
+@enduml

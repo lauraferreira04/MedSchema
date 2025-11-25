@@ -1,47 +1,51 @@
-let listaMedicamentos = []; // lista
+// ===============================
+// LISTA PRINCIPAL DE MEDICAMENTOS
+// ===============================
+let listaMedicamentos = [];
 
-// Selecionar elementos importantes
-const selectMedicamentos = document.querySelector(".container2 select");
+
+// ===============================
+// SELEÇÃO DE ELEMENTOS
+// ===============================
+
+// selects e inputs principais
+const selectMedicamentos = document.getElementById("selectMedicamentos");
 const btnAdd = document.querySelector(".btn-add");
 const listaUL = document.querySelector(".lista-box ul");
-
 const btnGerarPDF = document.querySelector(".btn-gerar");
 
-// campos consulta
+// campos do paciente (container1)
 const inputsC1 = document.querySelectorAll(".container1 input");
+const inputNome = inputsC1[0];
+const inputDataIda = inputsC1[1];
+const inputDataVolta = inputsC1[2];
+const inputGrade = document.querySelector("#grade");
 
-const inputNome = inputsC1[0];     // primeiro input: nome
-const inputDataIda = inputsC1[1];  // segundo input: data ida
-const inputDataVolta = inputsC1[2]; // terceiro input: data volta
-const inputGrade = document.querySelector("#grade"); // checkbox
-
-
-// Campos adicionais
+// campos adicionais (container2)
 const instrucaoExtra = document.querySelector('.c2-box input[type="text"]');
 const horarioInput = document.querySelector('.c2-box input[type="time"]');
-const turnoSelect = document.querySelectorAll('.c2-box select')[1]; // segundo select da container2
+const turnoSelect = document.querySelectorAll('.c2-box select')[1];
 const checkboxImagem = document.querySelector("#img-medicamento");
 const checkboxTurno = document.querySelector("#turno-medicamento");
 
-// Elemento de preview da imagem (imagem dentro da div .image-box)
+// preview da imagem
 const previewImg = document.querySelector('.image-box img');
 
-// Limpa a lista ao iniciar
+// limpar lista visual
 listaUL.innerHTML = "";
 
-// --------------------------------------------------
-// 1) Trocar imagem conforme o medicamento selecionado
-// --------------------------------------------------
-selectMedicamentos.addEventListener("change", () => {
+
+// ===============================
+// FUNÇÃO: Trocar imagem por medicamento (PREVIEW NO FORMULÁRIO)
+// ===============================
+function atualizarImagemMedicamento() {
     const val = selectMedicamentos.value;
 
-    // Valor padrão
     if (val === "SELECIONE" || val === "") {
         previewImg.src = "image/imagem_padrao.png";
         return;
     }
 
-    // Usando ifs para cada medicamento (arquivo conforme sua nomenclatura)
     if (val === "CLORIDRATO DE PROPRANOLOL 40MG") {
         previewImg.src = "image/cloridrato_de_propanol.webp";
         return;
@@ -62,22 +66,39 @@ selectMedicamentos.addEventListener("change", () => {
         return;
     }
 
-    // caso algum valor novo apareça, volta para padrão
     previewImg.src = "image/imagem_padrao.png";
-});
+}
 
-// Função de adicionar item à lista
-btnAdd.addEventListener("click", () => {
 
+// aplica mudança de imagem
+selectMedicamentos.addEventListener("change", atualizarImagemMedicamento);
+
+
+// ===============================
+// FUNÇÃO: Limpar campos após adicionar
+// ===============================
+function limparCampos() {
+    selectMedicamentos.selectedIndex = 0;
+    instrucaoExtra.value = "";
+    horarioInput.value = "";
+    turnoSelect.selectedIndex = 0;
+    checkboxImagem.checked = false;
+    checkboxTurno.checked = false;
+    previewImg.src = "image/imagem_padrao.png";
+}
+
+
+// ===============================
+// FUNÇÃO: Adicionar medicamento à lista
+// ===============================
+function adicionarMedicamento() {
     const medicamentoSelecionado = selectMedicamentos.value;
 
-    // Evitar inserir "SELECIONE" ou vazio
     if (medicamentoSelecionado === "SELECIONE") {
         alert("Selecione um medicamento antes de adicionar!");
         return;
     }
 
-    // 🔵 CRIAR OBJETO DO ITEM
     const item = {
         nome: medicamentoSelecionado,
         instrucao: instrucaoExtra.value.trim(),
@@ -87,75 +108,157 @@ btnAdd.addEventListener("click", () => {
         usarTurnoVisual: checkboxTurno.checked
     };
 
-    // 🔵 ADICIONAR NA LISTA
     listaMedicamentos.push(item);
 
-    console.log("Lista atual:", listaMedicamentos); // ← você vê no console no navegador
+    console.log("Lista atual:", listaMedicamentos);
 
-    // Criar um novo item <li>
     const li = document.createElement("li");
     li.textContent = medicamentoSelecionado;
-
-    // Adicionar na lista
     listaUL.appendChild(li);
 
-    // 🔵 LIMPAR TODOS OS CAMPOS APÓS ADICIONAR
-    selectMedicamentos.selectedIndex = 0;   // volta para "SELECIONE"
-    instrucaoExtra.value = "";              // limpa texto
-    horarioInput.value = "";                // limpa horário
-    turnoSelect.selectedIndex = 0;          // volta para "SELECIONE"
-    checkboxImagem.checked = false;         // desmarca
-    checkboxTurno.checked = false;          // desmarca
+    limparCampos();
+}
 
-    // RESETAR IMAGEM PARA A PADRÃO
-    previewImg.src = "image/imagem_padrao.png";
-});
+btnAdd.addEventListener("click", adicionarMedicamento);
 
+
+// ===============================
+// LÓGICA AUXILIAR PARA IMAGENS (PDF)
+// ===============================
+
+// 1. Retorna a imagem base64 do medicamento
+function obterImagemMedicamento(nome) {
+    if (nome === "CLORIDRATO DE PROPRANOLOL 40MG") return imagemCloridrato;
+    if (nome === "SUCCINATO DE METOPROLOL 25MG") return imagemMetoprolol; // Atenção: no seu imagens.js o nome da var pode ser imagemMetoprolol ou imagemSuccinato, verifique o arquivo. Usei imagemMetoprolol baseado no contentFetchId fornecido anteriormente, ajuste se necessário.
+    if (nome === "ALENDRONATO DE SÓDIO 70MG") return imagemAlendronato;
+    if (nome === "BUDESONIDA 50MCG") return imagemBudesonida;
+    return null;
+}
+
+// 2. Retorna a imagem base64 do Turno/Horário
+function obterImagemVisual(turno, horario) {
+    // Prioridade 1: Turno Selecionado
+    if (turno === "MANHÃ") return imagemManha;
+    if (turno === "TARDE") return imagemTarde;
+    if (turno === "NOITE") return imagemNoite;
+
+    // Prioridade 2: Horário
+    if (horario) {
+        // horario vem no formato "HH:MM", pegamos apenas a hora
+        const hora = parseInt(horario.split(":")[0]);
+
+        // 05:00 - 11:59 -> Manhã
+        if (hora >= 5 && hora < 12) return imagemManha;
+
+        // 12:00 - 18:59 -> Tarde
+        if (hora >= 12 && hora < 19) return imagemTarde;
+
+        // 19:00 - 04:59 -> Noite (Qualquer outro caso)
+        return imagemNoite;
+    }
+
+    return null;
+}
+
+
+// ===============================
+// FUNÇÃO: Gerar PDF
+// ===============================
 function gerarPDF(pacienteInfo, listaMedicamentos) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    let y = 10;
+    let y = 20; // Posição vertical inicial
 
-    // 📌 Título
-    doc.setFontSize(16);
-    doc.text("Plano de Medicamentos", 10, y);
-    y += 10;
-
-    // 📌 Informações do paciente
-    doc.setFontSize(12);
-    doc.text(`Paciente: ${pacienteInfo.nome}`, 10, y); y += 7;
-    doc.text(`Data ida: ${pacienteInfo.dataIda}`, 10, y); y += 7;
-    doc.text(`Data volta: ${pacienteInfo.dataVolta}`, 10, y); y += 7;
-    doc.text(`Gerar grade? ${pacienteInfo.gradeDias ? "Sim" : "Não"}`, 10, y);
+    // Título
+    doc.setFontSize(18);
+    doc.text("Plano de Medicamentos", 105, y, null, null, "center");
     y += 15;
 
-    // 📌 Lista de medicamentos
+    // Dados Paciente
+    doc.setFontSize(12);
+    doc.text(`Paciente: ${pacienteInfo.nome}`, 14, y); y += 7;
+    doc.text(`Período: ${pacienteInfo.dataIda} até ${pacienteInfo.dataVolta}`, 14, y); y += 7;
+    doc.text(`Grade de dias: ${pacienteInfo.gradeDias ? "Sim" : "Não"}`, 14, y);
+    y += 15;
+
+    // Linha divisória
+    doc.setLineWidth(0.5);
+    doc.line(10, y, 200, y);
+    y += 10;
+
     doc.setFontSize(14);
-    doc.text("Medicamentos:", 10, y);
-    y += 8;
+    doc.text("Medicamentos prescritos:", 14, y);
+    y += 10;
 
     doc.setFontSize(12);
 
-    listaMedicamentos.forEach((med) => {
-        doc.text(`- ${med.nome}`, 12, y); y += 6;
-        if (med.horario) doc.text(`  Horário: ${med.horario}`, 12, y), y += 6;
-        if (med.turno) doc.text(`  Turno: ${med.turno}`, 12, y), y += 6;
-        if (med.instrucao) doc.text(`  Instruções: ${med.instrucao}`, 12, y), y += 6;
-
-        y += 4;
-
-        // 📌 Nova página automática se necessário
-        if (y > 270) {
+    listaMedicamentos.forEach((med, index) => {
+        // Verifica se precisa criar nova página antes de começar o item
+        if (y > 250) {
             doc.addPage();
-            y = 10;
+            y = 20;
         }
+
+        // Nome do medicamento
+        doc.setFont(undefined, 'bold');
+        doc.text(`${index + 1}. ${med.nome}`, 14, y);
+        doc.setFont(undefined, 'normal');
+        y += 6;
+
+        // Detalhes em texto
+        if (med.horario) { doc.text(`   Horário: ${med.horario}`, 14, y); y += 5; }
+        if (med.turno && med.turno !== "SELECIONE") { doc.text(`   Turno: ${med.turno}`, 14, y); y += 5; }
+        if (med.instrucao) { doc.text(`   Instruções: ${med.instrucao}`, 14, y); y += 5; }
+
+        // --- LÓGICA DAS IMAGENS ---
+        let imagemMed = null;
+        let imagemVis = null;
+
+        // Verifica se deve pegar imagem do medicamento
+        if (med.usarImagem) {
+            imagemMed = obterImagemMedicamento(med.nome);
+        }
+
+        // Verifica se deve pegar imagem visual (sol/lua)
+        if (med.usarTurnoVisual) {
+            imagemVis = obterImagemVisual(med.turno, med.horario);
+        }
+
+        // Se houver imagens para mostrar
+        if (imagemMed || imagemVis) {
+            y += 2; // espacinho antes das imagens
+
+            // Se tiver imagem do medicamento
+            if (imagemMed) {
+                // (imagem, formato, x, y, largura, altura)
+                doc.addImage(imagemMed, "WEBP", 14, y, 30, 30); 
+            }
+
+            // Se tiver imagem visual (turno)
+            if (imagemVis) {
+                // Se tiver a do medicamento, coloca ao lado, senão coloca no inicio
+                let xPos = imagemMed ? 50 : 14; 
+                doc.addImage(imagemVis, "PNG", xPos, y, 30, 30);
+            }
+
+            // Incrementa Y baseado na altura da imagem (30) + margem
+            y += 35;
+        } else {
+            y += 5; // apenas um espaço extra se não tiver imagens
+        }
+
+        // Espaço entre itens da lista
+        y += 5;
     });
 
-    doc.save("medicamentos.pdf");
+    doc.save(`plano_${pacienteInfo.nome || "paciente"}.pdf`);
 }
 
 
+// ===============================
+// BOTÃO: Gerar PDF
+// ===============================
 btnGerarPDF.addEventListener("click", () => {
 
     const pacienteInfo = {
@@ -165,10 +268,10 @@ btnGerarPDF.addEventListener("click", () => {
         gradeDias: inputGrade.checked
     };
 
-    console.log("Paciente:", pacienteInfo);
-    console.log("Medicamentos:", listaMedicamentos);
+    if (listaMedicamentos.length === 0) {
+        alert("A lista está vazia! Adicione medicamentos antes de gerar.");
+        return;
+    }
 
-    // aqui continua sua função de gerar PDF normalmente...
     gerarPDF(pacienteInfo, listaMedicamentos);
-
 });
